@@ -4,7 +4,66 @@ import java.time.Year;
 public class exerciciosAleatorios {
     public static void main(String[] args) {
 //        calcularSalario(150, 40.5);
-        nomeDoMes(10);
+//        nomeDoMes(10);
+//        maiorOuIgual(25, 15);
+//        estaEntre(9, 10, 100, false);
+//        mutiplicar(5, 5);
+//        repetir(7, 10);
+            simboloMais(7);
+
+    }
+
+    private static void simboloMais(int i) {
+
+        String Resultado = "";
+
+        for (int j = 0; j < i; j++) {
+            Resultado = Resultado + "+";
+        }
+
+        System.out.println(Resultado);
+    }
+
+    private static void repetir(int numeroRepetido, int numeroRepetidor) {
+        int[] numeros = new int[numeroRepetidor];
+
+        for (int i = 0; i < numeroRepetidor; i++) {
+            numeros[i] = numeroRepetido;
+            System.out.println();
+        };
+
+        for(int numero: numeros){
+            System.out.print(numero + "\t");
+        }
+    }
+
+    private static void mutiplicar(int operando1, int operando2) {
+        int resultado = 0;
+        // multiplicar sem usar o operador *
+        if (operando1 > 0 && operando2 > 0) {
+
+            for (int i = 0; i < operando1; i++) {
+                resultado = resultado + operando2;
+            }
+            System.out.println(resultado);
+
+        } else {
+            System.out.println("Favor inserir um numero maior do que zero");
+        }
+    }
+
+    private static void estaEntre(int numero, int minimo, int maximo, boolean inclusivo) {
+        boolean resultado;
+        if (!inclusivo) {
+            resultado = numero > minimo && numero < maximo;
+        } else {
+            resultado = numero >= minimo && numero <= maximo;
+        }
+        System.out.println(resultado);
+    }
+
+    private static void maiorOuIgual(int i, int j) {
+        System.out.println(i >= j ? true : false);
     }
 
     private static void nomeDoMes(int month) {

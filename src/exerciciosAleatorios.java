@@ -9,8 +9,14 @@ public class exerciciosAleatorios {
 //        estaEntre(9, 10, 100, false);
 //        mutiplicar(5, 5);
 //        repetir(7, 10);
-            simboloMais(7);
+//            simboloMais(7);
 
+        receberPrimeiroEUltimoNumero(new Object[]{7,15,"bilola"});
+
+    }
+
+    private static void receberPrimeiroEUltimoNumero(Object[] objects) {
+        System.out.println("primeiro: " + objects[0] + " - Ultimo: " + objects[objects.length-1]);
     }
 
     private static void simboloMais(int i) {

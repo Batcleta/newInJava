@@ -6,11 +6,18 @@ public class mainMatriz {
 
         int [][] matriz3 = new int[2][2];
 
+        int[] p1 = new int[4];
+        int[] p2 = new int[4];
+        int ip1 = 0, ip2 = 0, ic = 0;
+
 
         for (int i = 0; i < matriz1.length; i++) {
             for (int j = 0; j < matriz1[i].length; j++) {
-                matriz3[i][j] = matriz1[i][j];
-                matriz3[i][j++] = matriz1[i][j++];
+                p1[ip1++] = matriz1[i][j];
+                p1[ip1++] = matriz2[j][i];
+
+                p2[ip2++] = matriz1[i][j];
+                p2[ip2++] = matriz2[j][1];
             }
         }
 

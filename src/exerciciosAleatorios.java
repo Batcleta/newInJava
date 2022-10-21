@@ -1,5 +1,6 @@
 import java.time.Month;
 import java.time.Year;
+import java.util.*;
 
 public class exerciciosAleatorios {
     public static void main(String[] args) {
@@ -9,14 +10,34 @@ public class exerciciosAleatorios {
 //        estaEntre(9, 10, 100, false);
 //        mutiplicar(5, 5);
 //        repetir(7, 10);
-//            simboloMais(7);
-
-        receberPrimeiroEUltimoNumero(new Object[]{7,15,"bilola"});
+//        simboloMais(7);
+//        receberPrimeiroEUltimoNumero(new Object[]{7,15,"bilola"});
+        retornaApenasNumeros(new Object[]{15, 20, "teste", "14"});
 
     }
 
+    private static void retornaApenasNumeros(Object[] objects) {
+        List<Integer> apenasNumeros = new ArrayList<Integer>();
+
+        for (int i = 0; i < objects.length; i++) {
+            if (objects[i] instanceof Integer) {
+                apenasNumeros.add((int) objects[i]);
+            }
+        }
+
+        Integer[] simpleArray = new Integer[ apenasNumeros.size() ];
+        apenasNumeros.toArray( simpleArray );
+
+        for (int numeros: simpleArray){
+            System.out.println(numeros);
+        }
+
+
+    }
+
+
     private static void receberPrimeiroEUltimoNumero(Object[] objects) {
-        System.out.println("primeiro: " + objects[0] + " - Ultimo: " + objects[objects.length-1]);
+        System.out.println("primeiro: " + objects[0] + " - Ultimo: " + objects[objects.length - 1]);
     }
 
     private static void simboloMais(int i) {
@@ -36,9 +57,10 @@ public class exerciciosAleatorios {
         for (int i = 0; i < numeroRepetidor; i++) {
             numeros[i] = numeroRepetido;
             System.out.println();
-        };
+        }
+        ;
 
-        for(int numero: numeros){
+        for (int numero : numeros) {
             System.out.print(numero + "\t");
         }
     }

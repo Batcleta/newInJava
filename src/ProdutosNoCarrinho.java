@@ -1,8 +1,3 @@
-//Crie um programa que simule uma lista(carrinho) de compras. O programa deve receber produtos, quantidade e seus
-// respectivos preços. Ao receber todos os produtos, o programa deve imprimir todos os produtos, quantidade, os preços
-// informados e o preço total dos produtos no carrinho.
-
-//atualizar carrinho
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -71,10 +66,11 @@ class ProdutoCarrinho extends Produto {
 }
 
 class Carrinho {
-    String idCompra;
-    ArrayList<ProdutoCarrinho> produtosCarrinho = new ArrayList();
-    BigDecimal totalCompra;
-    boolean finalizado;
+    private String idCompra;
+    private ArrayList<ProdutoCarrinho> produtosCarrinho = new ArrayList();
+    private BigDecimal totalCompra;
+    private boolean finalizado;
+    private String desconto = "0";
 
     public Carrinho(String idCompra, ArrayList<ProdutoCarrinho> produtosCarrinho, BigDecimal totalCompra, boolean finalizado) {
         this.idCompra = idCompra;
@@ -95,6 +91,11 @@ class Carrinho {
         return totalCompra;
     }
 
+    public void setProdutosCarrinho(ArrayList<ProdutoCarrinho> produtosCarrinho) {
+        this.produtosCarrinho = produtosCarrinho;
+    }
+
+
     public void setFinalizado(boolean finalizado) {
         this.finalizado = finalizado;
     }
@@ -105,6 +106,14 @@ class Carrinho {
 
     public void setTotalCompra(BigDecimal totalCompra) {
         this.totalCompra = totalCompra;
+    }
+
+    public String getDesconto() {
+        return desconto;
+    }
+
+    public void setDesconto(String desconto) {
+        this.desconto = desconto;
     }
 }
 
@@ -238,68 +247,88 @@ class ProdutoPage {
     private static void atualizarProduto(ArrayList<Produto> produtos) {
         System.out.println(" ====== ATUALIZAR PRODUTO ======");
 
-        if (produtos.size() == 0) {
-            System.out.println("Nenhum produto cadastrado");
-            return;
+        try {
+            if (produtos.size() == 0) {
+                System.out.println("Nenhum produto cadastrado");
+                return;
+            }
+
+            for (int i = 0; i < produtos.size(); i++) {
+                Produto pTemp = produtos.get(i);
+                System.out.println("ID: " + i + " - COD: " + pTemp.getCodigo() + " - NOME: " + pTemp.getName() + " - PREÇO: " + nf.format(pTemp.getPreço()));
+            }
+
+            System.out.println("Digite o ID do produto que deseja atualizar");
+            int opcao = sc.nextInt();
+
+            if (opcao > produtos.size() - 1) {
+                System.out.println("Produto não existe");
+                return;
+            }
+
+            sc.nextLine();
+            System.out.println("Digite um novo nome ( caso deseje atualizar o nome )");
+            String nome = sc.nextLine();
+
+            System.out.println("Digite um novo preço ( caso deseje atualizar o preço )");
+            BigDecimal preço = sc.nextBigDecimal();
+            sc.nextLine();
+
+            Produto uTemp = produtos.get(opcao);
+
+            if (nome.length() > 0) {
+                uTemp.setName(nome);
+            }
+
+            uTemp.setPreço(preço);
+
+
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
-
-        for (int i = 0; i < produtos.size(); i++) {
-            Produto pTemp = produtos.get(i);
-            System.out.println("ID: " + i + " - COD: " + pTemp.getCodigo() + " - NOME: " + pTemp.getName() + " - PREÇO: " + nf.format(pTemp.getPreço()));
-        }
-
-        System.out.println("Digite o ID do produto que deseja atualizar");
-        int opcao = sc.nextInt();
-
-        sc.nextLine();
-        System.out.println("Digite um novo nome ( caso deseje atualizar o nome )");
-        String nome = sc.nextLine();
-
-        System.out.println("Digite um novo preço ( caso deseje atualizar o preço )");
-        BigDecimal preço = sc.nextBigDecimal();
-
-        Produto uTemp = produtos.get(opcao);
-
-        if (nome.length() > 0) {
-            uTemp.setName(nome);
-        }
-
-        uTemp.setPreço(preço);
-        sc.nextLine();
     }
 
     private static void deletarProduto(ArrayList<Produto> produtos) {
         System.out.println(" ====== REMOVER USUARIO ======");
 
-        if (produtos.size() == 0) {
-            System.out.println("Nenhum produto cadastrado");
-            return;
-        }
+        try {
+            if (produtos.size() == 0) {
+                System.out.println("Nenhum produto cadastrado");
+                return;
+            }
 
-        for (int i = 0; i < produtos.size(); i++) {
-            Produto pTemp = produtos.get(i);
-            System.out.println("ID: " + i + " - COD: " + pTemp.getCodigo() + " - NOME: " + pTemp.getName() + " - PREÇO: " + nf.format(pTemp.getPreço()));
-        }
+            for (int i = 0; i < produtos.size(); i++) {
+                Produto pTemp = produtos.get(i);
+                System.out.println("ID: " + i + " - COD: " + pTemp.getCodigo() + " - NOME: " + pTemp.getName() + " - PREÇO: " + nf.format(pTemp.getPreço()));
+            }
 
-        System.out.println("Digite o ID do produto que deseja deletar");
-        int opcao = sc.nextInt();
-        sc.nextLine();
+            System.out.println("Digite o ID do produto que deseja deletar");
+            int opcao = sc.nextInt();
+            sc.nextLine();
 
-        System.out.println("Deseja realmente deletar o produto? [1] sim, [2] não");
-        System.out.print("escolha uma opção: ");
-        String confirma = sc.nextLine();
-        System.out.println(confirma);
+            if (opcao > produtos.size() - 1) {
+                System.out.println("Produto não existe");
+                return;
+            }
 
-        switch (confirma) {
-            case "1":
-                produtos.remove(opcao);
-                System.out.print("Produto removido com sucesso!\n\n");
-                break;
-            case "2":
-                System.out.println("Voltando ao menu principal");
-                break;
-            default:
-                System.out.println("Opção incorreta, voltaondo ao menu principal");
+            System.out.println("Deseja realmente deletar o produto? [1] sim, [2] não");
+            System.out.print("escolha uma opção: ");
+            String confirma = sc.nextLine();
+            System.out.println(confirma);
+
+            switch (confirma) {
+                case "1":
+                    produtos.remove(opcao);
+                    System.out.print("Produto removido com sucesso!\n\n");
+                    break;
+                case "2":
+                    System.out.println("Voltando ao menu principal");
+                    break;
+                default:
+                    System.out.println("Opção incorreta, voltaondo ao menu principal");
+            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -314,8 +343,7 @@ class ProdutoPage {
             concatenador[i] = aleatorio;
         }
 
-        gerador = Arrays.stream(concatenador).mapToObj(String::valueOf)
-                .reduce((a, b) -> a.concat(b)).get();
+        gerador = Arrays.stream(concatenador).mapToObj(String::valueOf).reduce((a, b) -> a.concat(b)).get();
 
         return gerador;
     }
@@ -362,7 +390,7 @@ class CarrinhoPage {
                         listarCarrinhosPorStatus();
                         break;
                     case "5":
-                        atualizarCarrinho();
+                        atualizarCarrinho(produtos);
                         break;
                     case "6":
                         finalizarCompra();
@@ -429,6 +457,11 @@ class CarrinhoPage {
                 System.out.println("Digite o ID do produto que deseja colocar no carrinho");
                 int opcao = sc.nextInt();
 
+                if (opcao > produtos.size() - 1) {
+                    System.out.println("Produto não existe");
+                    return;
+                }
+
                 System.out.println("Digite a quantidade que deseja deste produto");
                 int quantidade = sc.nextInt();
                 sc.nextLine();
@@ -492,7 +525,7 @@ class CarrinhoPage {
 
             System.out.println("-- > Carrinho: " + uTemp.getIdCompra());
             String status = uTemp.isFinalizado() ? "Finalizado" : "Em aberto";
-            System.out.println("\t\tStatus: " + status);
+            System.out.println("\tStatus: " + status);
             System.out.println("\tProdutos: ");
 
             for (int j = 0; j < uTemp.getProdutosCarrinho().size(); j++) {
@@ -506,7 +539,9 @@ class CarrinhoPage {
                 System.out.println("\t\tPreço Total: " + nf.format(pCTemp.getPreçoTotal()));
                 System.out.println("");
             }
-
+            if (uTemp.isFinalizado() && uTemp.getDesconto().length() > 0) {
+                System.out.println("\tDesconto: " + uTemp.getDesconto());
+            }
             System.out.println("\tTotal: " + nf.format(uTemp.getTotalCompra()));
             System.out.println("");
         }
@@ -531,7 +566,7 @@ class CarrinhoPage {
 
                     System.out.println("-- > Carrinho: " + uTemp.getIdCompra());
                     String status = uTemp.isFinalizado() ? "Finalizado" : "Em aberto";
-                    System.out.println("\t\tStatus: " + status);
+                    System.out.println("\tStatus: " + status);
                     System.out.println("\tProdutos: ");
 
                     for (int j = 0; j < uTemp.getProdutosCarrinho().size(); j++) {
@@ -545,7 +580,9 @@ class CarrinhoPage {
                         System.out.println("\t\tPreço Total: " + nf.format(pCTemp.getPreçoTotal()));
                         System.out.println("");
                     }
-
+                    if (uTemp.isFinalizado() && uTemp.getDesconto().length() > 0) {
+                        System.out.println("\tDesconto: " + uTemp.getDesconto());
+                    }
                     System.out.println("\tTotal: " + nf.format(uTemp.getTotalCompra()));
                     System.out.println("");
                     break;
@@ -571,22 +608,23 @@ class CarrinhoPage {
             System.out.println("[2] Finalizado");
             String statusCompra = sc.nextLine();
 
-            if (statusCompra != "1" && statusCompra != "2") {
+            if (!statusCompra.equals("1") && !statusCompra.equals("2")) {
                 System.out.println("Opção inválida");
                 System.out.print("\n\n");
                 return;
             }
 
+            boolean status = statusCompra.equals("2");
+
             boolean encontrado = false;
             for (int i = 0; i < carrinhos.size(); i++) {
                 Carrinho uTemp = carrinhos.get(i);
 
-                String status = uTemp.isFinalizado() ? "2" : "1";
-                if (statusCompra.equals(status)) {
+                if (status == uTemp.isFinalizado()) {
                     encontrado = true;
 
                     System.out.println("-- > Carrinho: " + uTemp.getIdCompra());
-                    System.out.println("\t\tStatus: " + status);
+                    System.out.println("\tStatus: " + status);
                     System.out.println("\tProdutos: ");
 
                     for (int j = 0; j < uTemp.getProdutosCarrinho().size(); j++) {
@@ -601,24 +639,146 @@ class CarrinhoPage {
                         System.out.println("");
                     }
 
+                    if (uTemp.isFinalizado() && uTemp.getDesconto().length() > 0) {
+                        System.out.println("\tDesconto: " + uTemp.getDesconto());
+                    }
                     System.out.println("\tTotal: " + nf.format(uTemp.getTotalCompra()));
                     System.out.println("");
                 }
             }
 
             if (!encontrado) {
-                System.out.println("Carrinho(s) não encontrado(s)");
+                System.out.println("Produtos(s) não encontrado(s)");
             }
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    private static void atualizarCarrinho() {
+    private static void atualizarCarrinho(ArrayList<Produto> produtos) {
 
-        // Adicionar novo produto
-        // Editar um produto existente
-        // Finalizar compra
+        ArrayList<ProdutoCarrinho> produtosCarrinho = new ArrayList();
+
+        boolean rodando = true;
+        while (rodando) {
+
+            try {
+
+                System.out.println("Digite o Numero da compra");
+                String idCompra = sc.nextLine();
+
+                boolean encontrado = false;
+                for (int i = 0; i < carrinhos.size(); i++) {
+                    Carrinho uTemp = carrinhos.get(i);
+
+                    if (idCompra.equals(uTemp.getIdCompra())) {
+                        encontrado = true;
+
+                        if (uTemp.isFinalizado() == true) {
+                            System.out.println("Não é possivel alterar este carrinho pois a comnpra ja foi finalizada");
+                            return;
+                        }
+
+                        System.out.println(" ATUALIZAR CARRINHO ");
+                        System.out.println("[1] Adicionar um novo produto");
+                        System.out.println("[2] Editar produto existente");
+                        System.out.println("[3] Finalizar compra");
+                        System.out.println("[4] Voltar");
+                        System.out.print("Escolher uma opção: ");
+                        String opcao = sc.nextLine();
+
+                        System.out.print("\n\n");
+
+                        produtosCarrinho = uTemp.getProdutosCarrinho();
+
+                        switch (opcao) {
+                            case "1":
+                                //mostrar produtos
+                                adicionarProdutos(produtosCarrinho, produtos);
+                                uTemp.setProdutosCarrinho(produtosCarrinho);
+
+                                BigDecimal totalDaCompra = new BigDecimal(0);
+
+                                for (int j = 0; j < produtosCarrinho.size(); j++) {
+                                    ProdutoCarrinho pCTemp = produtosCarrinho.get(j);
+                                    totalDaCompra = totalDaCompra.add(pCTemp.getPreçoTotal());
+                                }
+
+                                uTemp.setTotalCompra(totalDaCompra);
+
+                                System.out.println("Produto adicionado com sucesso");
+                                rodando = false;
+                                System.out.print("\n\n");
+                                break;
+                            case "2":
+                                for (int j = 0; j < produtosCarrinho.size(); j++) {
+                                    ProdutoCarrinho pCTemp = produtosCarrinho.get(j);
+                                    System.out.println("\t\tId: " + j);
+                                    System.out.println("\t\tCodigo: " + pCTemp.getCodigo());
+                                    System.out.println("\t\tNome: " + pCTemp.getName());
+                                    System.out.println("\t\tPreço Unitário: " + pCTemp.getPreço());
+                                    System.out.println("\t\tQuantidade: " + pCTemp.getQuantidade());
+                                    System.out.println("\t\tPreço Total: " + nf.format(pCTemp.getPreçoTotal()));
+                                    System.out.println("");
+                                }
+
+                                System.out.println("Digite o ID do produto que deseja editar");
+                                int produto = sc.nextInt();
+
+                                if (produto > produtosCarrinho.size() - 1) {
+                                    System.out.println("Produto não existe");
+                                    return;
+                                }
+
+                                System.out.println("Digite a nova quantidade");
+                                int quantidade = sc.nextInt();
+
+                                ProdutoCarrinho pCTemp = produtosCarrinho.get(produto);
+
+                                pCTemp.setQuantidade(quantidade);
+                                pCTemp.setPreçoTotal(pCTemp.getPreço().multiply(BigDecimal.valueOf(quantidade)));
+
+                                totalDaCompra = new BigDecimal(0);
+
+                                for (int j = 0; j < produtosCarrinho.size(); j++) {
+                                    ProdutoCarrinho pCArrayTemp = produtosCarrinho.get(j);
+                                    totalDaCompra = totalDaCompra.add(pCArrayTemp.getPreçoTotal());
+                                }
+
+                                uTemp.setTotalCompra(totalDaCompra);
+
+                                sc.nextLine();
+                                System.out.println("Produto atualizado com sucesso");
+                                rodando = false;
+                                System.out.print("\n\n");
+
+                                break;
+                            case "3":
+                                uTemp.setFinalizado(true);
+                                System.out.println("Compra realizada com sucesso");
+                                rodando = false;
+                                System.out.print("\n\n");
+                                break;
+                            case "4":
+                                System.out.println("voldando...");
+                                rodando = false;
+                                break;
+                            default:
+                                System.out.println("Opção inválida");
+                                rodando = false;
+                        }
+
+                        break;
+                    }
+                }
+
+                if (!encontrado) {
+                    System.out.println("Carrinho não encontrado");
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
 
     }
 
@@ -686,6 +846,7 @@ class CarrinhoPage {
                         case "2":
                             BigDecimal totalComDesconto = uTemp.getTotalCompra().multiply(BigDecimal.valueOf(1 - 0.2));
                             uTemp.setTotalCompra(totalComDesconto);
+                            uTemp.setDesconto("20%");
                             uTemp.setFinalizado(true);
                             break;
                         default:
@@ -715,8 +876,7 @@ class CarrinhoPage {
             concatenador[i] = aleatorio;
         }
 
-        gerador = Arrays.stream(concatenador).mapToObj(String::valueOf)
-                .reduce((a, b) -> a.concat(b)).get();
+        gerador = Arrays.stream(concatenador).mapToObj(String::valueOf).reduce((a, b) -> a.concat(b)).get();
 
         return gerador;
     }

@@ -887,7 +887,7 @@ public class ProdutosNoCarrinho {
     static Scanner sc = new Scanner(System.in);
     static ArrayList<Produto> produtos = new ArrayList();
 
-    public static void main(String[] args) {
+    public static void main() {
 
         boolean rodando = true;
         while (rodando) {
@@ -921,3 +921,5 @@ public class ProdutosNoCarrinho {
 
     }
 }
+
+

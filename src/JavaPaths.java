@@ -1,7 +1,56 @@
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+
+
+class ProdutoFile {
+    private String codigo;
+    private String nome;
+    private String preco;
+    private String Quantidade;
+
+    public ProdutoFile(String codigo, String nome, String preco, String quantidade) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.preco = preco;
+        Quantidade = quantidade;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getPreco() {
+        return preco;
+    }
+
+    public void setPreco(String preco) {
+        this.preco = preco;
+    }
+
+    public String getQuantidade() {
+        return Quantidade;
+    }
+
+    public void setQuantidade(String quantidade) {
+        Quantidade = quantidade;
+    }
+}
 
 class DataService {
     private Path db;
@@ -40,20 +89,27 @@ class DataService {
 }
 
 public class JavaPaths {
+    static ArrayList<ProdutoFile> Produtos = new ArrayList();
+
     public static void main(String[] args) {
         boolean rodando = true;
         Path db = criarDataBase();
         DataService data = new DataService(db);
 
         for (String produtos : data.lerArquivo()) {
-            System.out.println(produtos);
+            String[] produto = produtos.split("&");
+
+            ProdutoFile novoProduto = new ProdutoFile("0001", produto[0], produto[1], produto[2]);
+            Produtos.add(novoProduto);
         }
 
-        DataService escrever = new DataService(db);
-        escrever.escreverArquivo(data.lerArquivo());
+        for (int i = 0; i < Produtos.size(); i++) {
+            ProdutoFile pTemp = Produtos.get(i);
+            System.out.println("Código: " + pTemp.getCodigo() + " - Produto: " + pTemp.getNome() + " - Preço: " + pTemp.getPreco() + " - Quantidade: " + pTemp.getQuantidade());
+        }
+//        DataService escrever = new DataService(db);
+//        escrever.escreverArquivo(data.lerArquivo());
 
-
-        
 
     }
 

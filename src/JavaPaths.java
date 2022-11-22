@@ -59,11 +59,16 @@ class DataService {
         this.db = db;
     }
 
-    public List<String> lerArquivo() {
-        List<String> Produtos = List.of("");
+    public List<ProdutoFile> lerArquivo() {
+        List<ProdutoFile> Produtos = null;
 
         try {
-            Produtos = Files.readAllLines(db);
+            List<String> data = Files.readAllLines(db);
+
+            for (int i = 0; i < data.size(); i++) {
+                String[] dataTemp = data.get(i).split("&");
+                ProdutoFile produtoFile = new ProdutoFile(dataTemp[0], dataTemp[1], dataTemp[2], dataTemp[3]);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,7 +94,6 @@ class DataService {
 }
 
 public class JavaPaths {
-    static ArrayList<ProdutoFile> Produtos = new ArrayList();
 
     public static void main(String[] args) {
         boolean rodando = true;
@@ -97,16 +101,11 @@ public class JavaPaths {
         DataService data = new DataService(db);
 
         for (String produtos : data.lerArquivo()) {
-            String[] produto = produtos.split("&");
+            System.out.println(produtos);
 
-            ProdutoFile novoProduto = new ProdutoFile("0001", produto[0], produto[1], produto[2]);
-            Produtos.add(novoProduto);
         }
 
-        for (int i = 0; i < Produtos.size(); i++) {
-            ProdutoFile pTemp = Produtos.get(i);
-            System.out.println("Código: " + pTemp.getCodigo() + " - Produto: " + pTemp.getNome() + " - Preço: " + pTemp.getPreco() + " - Quantidade: " + pTemp.getQuantidade());
-        }
+
 //        DataService escrever = new DataService(db);
 //        escrever.escreverArquivo(data.lerArquivo());
 

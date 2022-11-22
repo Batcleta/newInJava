@@ -194,7 +194,15 @@ public class sorteioMegasena {
     }
 
     private static int novoAleatorio(int max) {
-        int gerador = (int) (Math.random() * max);
+        int aleatorio = (int) (Math.random() * max);
+        int[] bilola;
+        int gerador = 0;
+
+        for (int i = 0; i < max; i++) {
+
+
+        }
+
         return gerador;
     }
 

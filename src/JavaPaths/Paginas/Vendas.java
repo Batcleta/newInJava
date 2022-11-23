@@ -1,9 +1,12 @@
 package JavaPaths.Paginas;
 
+import JavaPaths.Models.ProdutoVenda;
+import JavaPaths.Models.Venda;
 import JavaPaths.Services.ProdDataService;
 import JavaPaths.Services.VendDataService;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Scanner;
 
 public class Vendas {
@@ -32,10 +35,32 @@ public class Vendas {
                         vendasDb.gerarNovaVenda();
                         break;
                     case "2":
-                        vendasDb.listarVendas();
+                        List<Venda> data = vendasDb.listarVendas();
+
+                        for (int i = 0; i < data.size(); i++) {
+                            Venda venda = data.get(i);
+
+                            System.out.println("Venda: " + venda.getIdCompra());
+                            System.out.print("Produto ----->\n");
+                            for (int j = 0; j < venda.getProdutoVendas().size(); j++) {
+                                System.out.println("");
+                                ProdutoVenda prodVendTemp = venda.getProdutoVendas().get(j);
+                                System.out.println("\t\tCodigo: " + prodVendTemp.getCodigo());
+                                System.out.println("\t\tNome: " + prodVendTemp.getNome());
+                                System.out.println("\t\tPreço Unitário: " + prodVendTemp.getPreço());
+                                System.out.println("\t\tQuantidade: " + prodVendTemp.getQuantidade());
+                                System.out.println("\t\tPreço Total: " + prodVendTemp.getTotalProdutos());
+                                System.out.println("");
+                            }
+
+                            System.out.println("Desconto: " + venda.getDesconto());
+                            System.out.println("Total: " + venda.getTotalCompra());
+                            System.out.print("\n\n");
+                        }
+
                         break;
                     case "3":
-                        vendasDb.ListarVendas();
+                        vendasDb.ListarVendasPorCodigo();
                         break;
                     case "4":
                         vendasDb.cancelarVenda();

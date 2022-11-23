@@ -200,6 +200,7 @@ public class DataService {
                             case "2":
                                 System.out.println("Digite o novo preço do produto");
                                 BigDecimal preço = sc.nextBigDecimal();
+                                sc.nextLine();
 
                                 produtos.get(i).setPreço(preço);
                                 System.out.print("Preço do produto alterado com sucesso\n");
@@ -207,6 +208,7 @@ public class DataService {
                             case "3":
                                 System.out.println("Digite a nova quantidade do produto");
                                 Integer quantidade = sc.nextInt();
+                                sc.nextLine();
 
                                 produtos.get(i).setQuantidade(quantidade);
                                 System.out.print("Quantidade do produto alterada com sucesso\n");
@@ -217,8 +219,6 @@ public class DataService {
                                 System.out.println("Opção inválida");
                                 atualizar = true;
                         }
-
-                        sc.nextLine();
 
                         System.out.println("Deseja alterar algo mais?");
                         System.out.println("[1] Sim");
@@ -266,7 +266,58 @@ public class DataService {
 
     public void DeletarProduto() {
 
+        try {
+            List<Produto> produtos = ListarProduto();
+            List<String> produtosAtualizados = new ArrayList<String>();
+
+            System.out.println(" ====== DELETAR PRODUTO ======");
+            System.out.println("Digite o codigo do produto");
+            String codigo = sc.nextLine();
+
+            boolean encontrado = false;
+            for (int i = 0; i < produtos.size(); i++) {
+                Produto prodTemp = produtos.get(i);
+
+                if (codigo.equals(prodTemp.getCodigo().toString())) {
+                    encontrado = true;
+
+                    System.out.println("Código: " + prodTemp.getCodigo() + " - Nome: " + prodTemp.getNome());
+                    System.out.print("\n");
+                    System.out.println("Tem certeza que deseja deletar o produto?");
+                    System.out.println("[1] Sim");
+                    System.out.println("[2] Não");
+                    System.out.print("Escolha uma opção: ");
+                    String opção = sc.nextLine();
+
+                    switch (opção) {
+                        case "1":
+                            produtos.remove(i);
+
+                            for (int j = 0; j < produtos.size(); j++) {
+                                Produto attProdTemp = produtos.get(j);
+                                produtosAtualizados.add(attProdTemp.getCodigo().toString() + "&" + attProdTemp.getNome() + "&" + attProdTemp.getPreço().toString() + "&" + attProdTemp.getQuantidade().toString());
+                            }
+
+                            Files.write(dbProduto, produtosAtualizados);
+                            System.out.print("Produto deletado com sucesso\n\n");
+
+                            break;
+                        case "2":
+                        default:
+                            System.out.println("Opção inválida");
+                    }
+
+                    break;
+                }
+            }
+
+            if (!encontrado) {
+                System.out.println("Produto não encontrado");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
-
-
 }

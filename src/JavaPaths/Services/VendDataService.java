@@ -191,6 +191,8 @@ public class VendDataService {
     }
 
     public List<Venda> listarVendas() {
+
+        //Falta tirar do estoque de produto original
         List<Venda> vendas = new ArrayList<Venda>();
         List<ProdutoVenda> produtos = new ArrayList<>();
 

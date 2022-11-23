@@ -1,0 +1,3 @@
+0001&Bobina térmica 80x40&99,90&500
+0002&Etiqueta térmica 40x40&104,90&500
+0003&Etiqueta térmica 60x30&119,90&300

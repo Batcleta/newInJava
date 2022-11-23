@@ -1,4 +1,2 @@
 1&Bobina térmica 80x40&119.90&500
 2&Etiqueta térmica 40x40&104.90&500
-3&Etiqueta térmica 60x30&119.90&300
-4&Bilola roliça de 30cm&19.90&200

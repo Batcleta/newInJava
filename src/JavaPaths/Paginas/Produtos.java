@@ -1,10 +1,9 @@
 package JavaPaths.Paginas;
 
 import JavaPaths.Models.Produto;
-import JavaPaths.Services.DataService;
+import JavaPaths.Services.ProdDataService;
 
 import java.nio.file.Path;
-import java.security.Provider;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,7 +29,7 @@ public class Produtos {
                 String opcao = sc.nextLine();
                 System.out.print("\n\n");
 
-                DataService produtosDb = new DataService(db.toString());
+                ProdDataService produtosDb = new ProdDataService(db.toString());
 
 
                 switch (opcao){
@@ -41,14 +40,14 @@ public class Produtos {
                         List<Produto> data = produtosDb.ListarProduto();
 
                         for (Produto produtos : data) {
-                            System.out.println("Código: " + produtos.getCodigo() + " - Produto: " + produtos.getNome() + " - Preço: " + produtos.getPreço() + " - Quantidade: " + produtos.getQuantidade());
+                            System.out.println("Código: " + produtos.getCodigo() + " - Produto: " + produtos.getNome() + " - Preço: " + produtos.getPreço() + " - Quantidade: " + produtos.getEstoque());
                         }
                         System.out.print("\n");
 
                         break;
                     case "3":
                         Produto produto = produtosDb.ListarProdutoPorCodigo();
-                        System.out.println("Código: " + produto.getCodigo() + " - Produto: " + produto.getNome() + " - Preço: " + produto.getPreço() + " - Quantidade: " + produto.getQuantidade());
+                        System.out.println("Código: " + produto.getCodigo() + " - Produto: " + produto.getNome() + " - Preço: " + produto.getPreço() + " - Quantidade: " + produto.getEstoque());
                         System.out.print("\n");
                         break;
                     case "4":

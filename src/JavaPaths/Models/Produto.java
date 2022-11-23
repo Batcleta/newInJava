@@ -6,13 +6,13 @@ public class Produto {
     private Integer codigo;
     private String nome;
     private BigDecimal preço;
-    private Integer quantidade;
+    private Integer estoque;
 
     public Produto(Integer codigo, String nome, BigDecimal preço, Integer quantidade) {
         this.codigo = codigo;
         this.nome = nome;
         this.preço = preço;
-        this.quantidade = quantidade;
+        this.estoque = quantidade;
     }
 
     public Integer getCodigo() {
@@ -27,8 +27,8 @@ public class Produto {
         return preço;
     }
 
-    public Integer getQuantidade() {
-        return quantidade;
+    public Integer getEstoque() {
+        return estoque;
     }
 
     public void setNome(String nome) {
@@ -39,7 +39,7 @@ public class Produto {
         this.preço = preço;
     }
 
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
+    public void setEstoque(Integer estoque) {
+        this.estoque = estoque;
     }
 }

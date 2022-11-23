@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class DataService {
+public class ProdDataService {
 
     private Path dbProduto;
     private Scanner sc = new Scanner(System.in);
     static NumberFormat nf = NumberFormat.getCurrencyInstance();
 
-    public DataService(String db) {
+    public ProdDataService(String db) {
         this.dbProduto = Paths.get(db + "/produtos.txt");
     }
 
@@ -82,8 +82,6 @@ public class DataService {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-
-
     }
 
     private void criarArquivo() {
@@ -210,7 +208,7 @@ public class DataService {
                                 Integer quantidade = sc.nextInt();
                                 sc.nextLine();
 
-                                produtos.get(i).setQuantidade(quantidade);
+                                produtos.get(i).setEstoque(quantidade);
                                 System.out.print("Quantidade do produto alterada com sucesso\n");
                                 break;
                             case "4":
@@ -236,7 +234,7 @@ public class DataService {
 
                                 for (int j = 0; j < produtos.size(); j++) {
                                     Produto attProdTemp = produtos.get(j);
-                                    produtosAtualizados.add(attProdTemp.getCodigo().toString() + "&" + attProdTemp.getNome() + "&" + attProdTemp.getPreço().toString() + "&" + attProdTemp.getQuantidade().toString());
+                                    produtosAtualizados.add(attProdTemp.getCodigo().toString() + "&" + attProdTemp.getNome() + "&" + attProdTemp.getPreço().toString() + "&" + attProdTemp.getEstoque().toString());
                                 }
 
                                 Files.write(dbProduto, produtosAtualizados);
@@ -295,7 +293,7 @@ public class DataService {
 
                             for (int j = 0; j < produtos.size(); j++) {
                                 Produto attProdTemp = produtos.get(j);
-                                produtosAtualizados.add(attProdTemp.getCodigo().toString() + "&" + attProdTemp.getNome() + "&" + attProdTemp.getPreço().toString() + "&" + attProdTemp.getQuantidade().toString());
+                                produtosAtualizados.add(attProdTemp.getCodigo().toString() + "&" + attProdTemp.getNome() + "&" + attProdTemp.getPreço().toString() + "&" + attProdTemp.getEstoque().toString());
                             }
 
                             Files.write(dbProduto, produtosAtualizados);

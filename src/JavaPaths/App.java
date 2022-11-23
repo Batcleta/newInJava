@@ -1,6 +1,7 @@
 package JavaPaths;
 
 import JavaPaths.Paginas.Produtos;
+import JavaPaths.Paginas.Vendas;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +19,8 @@ public class App {
         while (rodando) {
 
             System.out.println("[1] Gerenciar produtos");
-            System.out.println("[2] Sair");
+            System.out.println("[2] Vender");
+            System.out.println("[3] Sair");
             System.out.print("Escolha uma opção: ");
 
             String opcao = sc.nextLine();
@@ -29,6 +31,9 @@ public class App {
                     Produtos.main(db);
                     break;
                 case "2":
+                    Vendas.main(db);
+                    break;
+                case "3":
                     System.out.println("---> Obrigado por utilizar o Bilolog PDV");
                     rodando = false;
                     break;

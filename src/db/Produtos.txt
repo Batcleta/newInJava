@@ -1,0 +1,7 @@
+0001&Bobina térmica 80x40&99,90&500
+0001&Etiqueta térmica 60x300&119,90&2500
+0001&Bobina térmica 57x300&119,90&600
+0001&Etiqueta térmica 60x300&119,90&2500
+0001&Bobina térmica 57x300&119,90&600
+0001&Etiqueta térmica 60x300&119,90&2500
+0001&Bobina térmica 57x300&119,90&600

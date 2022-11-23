@@ -60,7 +60,7 @@ class DataService {
     }
 
     public List<ProdutoFile> lerArquivo() {
-        List<ProdutoFile> Produtos = null;
+        List<ProdutoFile> Produtos = new ArrayList();
 
         try {
             List<String> data = Files.readAllLines(db);
@@ -68,6 +68,7 @@ class DataService {
             for (int i = 0; i < data.size(); i++) {
                 String[] dataTemp = data.get(i).split("&");
                 ProdutoFile produtoFile = new ProdutoFile(dataTemp[0], dataTemp[1], dataTemp[2], dataTemp[3]);
+                Produtos.add(produtoFile);
             }
 
         } catch (Exception e) {
@@ -77,12 +78,23 @@ class DataService {
         return Produtos;
     }
 
-    public void escreverArquivo(List<String> data) {
+    public void escreverArquivo(List<ProdutoFile> data) {
+        List<String> createData = new ArrayList<String>();
 
-        data.add("Etiqueta térmica 80x80&200&999");
-        data.add("Etiqueta térmica 80x60&200&999");
         try {
-            Files.write(db, data);
+
+            for (ProdutoFile dataTemp : data) {
+                createData.add(dataTemp.getCodigo() + "&" + dataTemp.getNome() + "&" + dataTemp.getPreco() + "&" + dataTemp.getQuantidade());
+            }
+
+//            createData.add("0001&Etiqueta térmica 60x300&119,90&2500");
+//            createData.add("0001&Bobina térmica 57x300&119,90&600");
+
+            for (String teste : createData) {
+                System.out.println(teste);
+            }
+
+            Files.write(db, createData);
             System.out.println("Dados gravados com sucesso");
 
         } catch (Exception e) {
@@ -99,15 +111,15 @@ public class JavaPaths {
         boolean rodando = true;
         Path db = criarDataBase();
         DataService data = new DataService(db);
+//        data.lerArquivo();
 
-        for (String produtos : data.lerArquivo()) {
-            System.out.println(produtos);
-
+        for (ProdutoFile produtos : data.lerArquivo()) {
+            System.out.println("Código: " + produtos.getCodigo() + " - Produto: " + produtos.getNome() + " - Preço: " + produtos.getPreco() + " - Quantidade: " + produtos.getQuantidade());
         }
 
 
-//        DataService escrever = new DataService(db);
-//        escrever.escreverArquivo(data.lerArquivo());
+        DataService escrever = new DataService(db);
+        escrever.escreverArquivo(data.lerArquivo());
 
 
     }
@@ -116,7 +128,7 @@ public class JavaPaths {
         Path createdFile = Path.of("");
         try {
             Path diretorio = criarDiretorio();
-            createdFile = Paths.get(diretorio + "\\DataBase.txt");
+            createdFile = Paths.get(diretorio + "/Produtos.txt");
 
             if (Files.exists(createdFile)) {
 //                System.out.println("Arquivo ja existe");
@@ -133,7 +145,7 @@ public class JavaPaths {
     }
 
     private static Path criarDiretorio() {
-        Path createdPath = Paths.get("C:\\Users\\Usuario\\IdeaProjects\\untitled1\\src\\db");
+        Path createdPath = Paths.get("src/db");
         try {
 
             if (Files.exists(createdPath)) {

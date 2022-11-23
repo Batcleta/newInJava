@@ -1,4 +1,1 @@
-0001&Bobina térmica 80x40&99,90&500
-0002&Etiqueta térmica 40x0&104,90&500
-0003&Etiqueta de gondola 80x80&200&999
-0004&Bobina térmica 57x300&200&999
+

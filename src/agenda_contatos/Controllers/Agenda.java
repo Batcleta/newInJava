@@ -18,10 +18,22 @@ public class Agenda {
     }
 
     public Contato pesquisarPorNome(String nome){
+        boolean encontrado = false;
 
-        System.out.println("Digite o nome do contato");
+        for (int i = 0; i < contatos.size(); i++) {
+            Contato cTemp = contatos.get(i);
 
-        return
+            if (nome.equals(cTemp.getNome().trim())) {
+                encontrado = true;
+                return cTemp;
+            }
+        }
+
+        if (!encontrado) {
+            System.out.println("Produto não encontrado");
+        }
+
+
     }
 
     public void editar(){

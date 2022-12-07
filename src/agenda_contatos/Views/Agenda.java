@@ -99,6 +99,9 @@ public class Agenda {
                 if (nome == null) throw new NotNullable(nome, "é um campo obrigatório");
                 new agenda_contatos.Controllers.Agenda().pesquisarPorNome(nome);
 
+            } catch (NotNullable ex) {
+                System.out.println(ex.getMessage());
+                isInvalid = true;
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
                 isInvalid = true;

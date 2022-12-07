@@ -221,7 +221,6 @@ class ProdutoPage {
     private static void listarProdutoPorCodigo(ArrayList<Produto> produtos) {
         System.out.println(" ====== PROCURAR PRODUTO POR CODIGO ======");
         System.out.println("Digite o codigo do produto");
-
         String codigo = sc.nextLine();
 
         boolean encontrado = false;

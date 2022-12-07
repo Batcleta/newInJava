@@ -35,7 +35,7 @@ public class Agenda {
 
             switch (input.string()) {
                 case "1":
-                    cadastrarContato(contatos);
+                    cadastrarContato();
                     break;
                 case "2":
                     listarContatos();
@@ -93,6 +93,11 @@ public class Agenda {
         do {
             isInvalid = false;
             try {
+                System.out.println("Digite o nome do contato");
+                String nome = input.string();
+
+                if (nome == null) throw new NotNullable(nome, "é um campo obrigatório");
+                new agenda_contatos.Controllers.Agenda().pesquisarPorNome(nome);
 
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
@@ -103,18 +108,25 @@ public class Agenda {
 
     private static void listarContatos() {
         boolean isInvalid;
+        int requestPool = 0;
         do {
             isInvalid = false;
-            try {
 
+            if (requestPool >= 3) {
+                break;
+            }
+
+            try {
+                new agenda_contatos.Controllers.Agenda().listarTodos(1, 20);
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
+                requestPool += 1;
                 isInvalid = true;
             }
         } while (isInvalid);
     }
 
-    private static void cadastrarContato(List<Contato> contatos) {
+    private static void cadastrarContato() {
 
         List<Telefone> telefones = new ArrayList<>();
         List<Endereco> enderecos = new ArrayList<>();
@@ -202,7 +214,7 @@ public class Agenda {
 
 
                 Contato contato = new Contato(tipoContato, name, lastName, enderecos, telefones);
-                contatos.add(contato);
+                new agenda_contatos.Controllers.Agenda().cadastrar(contato);
 
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());

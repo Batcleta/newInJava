@@ -7,9 +7,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class Main {
-    static List<String> listaContatos = new ArrayList<>();
     static Map<Integer, Integer> carrinhoCompras = new HashMap<>();
-
     static Path path = Paths.get("./arquivo.txt");
 
     public static void main(String[] args) {
@@ -24,18 +22,20 @@ public class Main {
             System.out.println("3-Pesquisar produto");
             System.out.println("4-Deletar produto");
             System.out.println("5-Comprar produtos");
+            if (carrinhoCompras.entrySet().size() > 0) {
+                System.out.println("6-Finalizar compra");
+            }
             System.out.println("0-Sair");
             opcaoEntrada = input.nextLine();
+
             switch (opcaoEntrada) {
                 case "1" -> criarProduto(input);
                 case "2" -> editarProduto(input);
                 case "3" -> pesquisarProduto(input);
                 case "4" -> deletarProduto(input);
                 case "5" -> comprarProduto(input);
-                case "0" -> {
-                    continuar = false;
-                    System.out.println("Obrigado por usar nosso prodgrama");
-                }
+                case "6" -> finalizarCompras(input);
+                case "0" -> continuar = false;
                 default -> System.out.println("Opção inválida");
             }
         }
@@ -74,9 +74,9 @@ public class Main {
             for (int i = 0; i < produtos.size(); i++) {
                 String[] produto = produtos.get(i).split("\\|");
 
-                System.out.printf("Id: %d; Nome: %s; Qtde de estoque: %s; Preço: %s;\n", i, produto[0], produto[1],
-                        produto[2]);
+                System.out.printf("Id: %d; Nome: %s; Qtde de estoque: %s; Preço: %s;\n", i, produto[0], produto[1], produto[2]);
             }
+            System.out.print("\n");
 
         } catch (Exception ex) {
             System.out.println("Error" + ex.getMessage());
@@ -86,7 +86,6 @@ public class Main {
     }
 
     public static void criarProduto(Scanner input) {
-
         // Criei um método separado apenas por conta de precisar usar o try catch dentro do loop
         // com o try catch dentro do loop eu consigo modificar o "isInvalid" para true dentro do catch
 
@@ -123,6 +122,7 @@ public class Main {
             }
         } while (isInvalid);
 
+
     }
 
     public static void editarProduto(Scanner input) {
@@ -154,7 +154,6 @@ public class Main {
                     Files.write(path, listaProdutosOriginal);
                 } else {
                     System.out.print("[ERRO] ID inválido!\n\n");
-                    isInvalid = true;
                 }
 
             } catch (InputMismatchException ex) {
@@ -175,17 +174,16 @@ public class Main {
 
         try {
             System.out.println("Digite: o nome do produto a ser pesquisado");
-            String produtoPesquisado = input.nextLine().replaceAll("/^[^,]+,\\s[^,]+$/", " ");
+            String produtoPesquisado = input.nextLine().toLowerCase();
 
             Integer id = 0;
 
             for (String line : listaProdutos) {
                 String[] produto = line.split("\\|");
-                String nomeProduto = produto[0].replaceAll("/^[^,]+,\\s[^,]+$/", " ");
+                String nomeProduto = produto[0].toLowerCase();
 
                 if (nomeProduto.contains(produtoPesquisado)) {
-                    System.out.printf("Id: %d; Nome: %s; Qtde de estoque: %s; Preço: %s;\n", id, produto[0], produto[1],
-                            produto[2]);
+                    System.out.printf("Id: %d; Nome: %s; Qtde de estoque: %s; Preço: %s;\n", id, produto[0], produto[1], produto[2]);
                 }
                 id++;
             }
@@ -212,10 +210,32 @@ public class Main {
                 input.nextLine();
 
                 if (idProduto >= 0 && idProduto < listaProdutosOriginal.size()) {
-                    listaProdutosOriginal.remove(idProduto.intValue());
-                    Files.write(path, listaProdutosOriginal);
 
-                    System.out.print("Produto deletado com sucesso\n\n");
+                    boolean rodando = true;
+                    while (rodando) {
+
+                        System.out.println("Deseja realmente deletar este produto?");
+                        System.out.println("1 - Sim");
+                        System.out.println("2 - Não");
+                        System.out.print("Digite uma opção: ");
+                        String opcao = input.nextLine();
+
+                        switch (opcao) {
+                            case "1" -> {
+                                listaProdutosOriginal.remove(idProduto.intValue());
+                                Files.write(path, listaProdutosOriginal);
+
+                                rodando = false;
+                                System.out.print("Produto deletado com sucesso\n\n");
+                            }
+                            case "2" -> {
+                                rodando = false;
+                                System.out.print("Voltando...\n\n");
+                            }
+                            default -> System.out.println("Opção inválida");
+                        }
+
+                    }
 
                 } else {
                     System.out.println("[ERRO] ID inválido!");
@@ -233,58 +253,102 @@ public class Main {
             }
 
         } while (isInvalid);
-
     }
 
     public static void comprarProduto(Scanner input) {
         try {
-            List<String> listaProdutosOriginal = Files.readAllLines(path);
+            List<String> listaProdutosOriginal = listarProsutos();
             Integer id = 0;
 
-            for (String line : listaProdutosOriginal) {
-                String[] produto = line.split("\\|");
-                System.out.printf("Id: %d; Nome: %s; Qtde de estoque: %s; Preço: %s;\n", id, produto[0], produto[1],
-                        produto[2]);
-                id++;
+            boolean adicionando = true;
+
+            while (adicionando) {
+                System.out.println("Qual o id do produto que você deseja comprar?");
+
+                int idProduto = input.nextInt();
+                input.nextLine();
+
+                if (idProduto >= 0 && idProduto < listaProdutosOriginal.size()) {
+
+                    int produtosDisponiveis = Integer.parseInt(listaProdutosOriginal.get(idProduto).split("\\|")[1]);
+
+                    System.out.println("Quantos itens desse produto você deseja comprar?");
+                    Integer qtdeProduto = input.nextInt();
+                    input.nextLine();
+
+                    Integer somaQtdeProduto = qtdeProduto;
+
+                    if (carrinhoCompras.get(idProduto) != null) {
+                        somaQtdeProduto = carrinhoCompras.get(idProduto) + somaQtdeProduto;
+                    }
+
+                    if (somaQtdeProduto <= produtosDisponiveis) {
+                        carrinhoCompras.put(idProduto, somaQtdeProduto);
+                    } else {
+                        System.out.printf("No momento existem apenas %d produtos disponíveis no estoque\n", produtosDisponiveis);
+                    }
+                    System.out.println("");
+                    System.out.println("-=".repeat(5) + "CARRINHO DE COMPRAS" + "-=".repeat(5));
+                    System.out.println("Produto | Preço | Qtde | Valor Total");
+                    for (Map.Entry<Integer, Integer> entry : carrinhoCompras.entrySet()) {
+                        String[] produto = listaProdutosOriginal.get(entry.getKey()).split("\\|");
+                        String nomeProduto = produto[0];
+                        Double precoProduto = Double.valueOf(produto[2]);
+                        Integer qtdeCarrinho = entry.getValue();
+                        Double valorTotal = qtdeCarrinho * precoProduto;
+
+                        System.out.printf("%s | %.2f | %d | %.2f\n", nomeProduto, precoProduto, qtdeCarrinho, valorTotal);
+
+                    }
+
+                    System.out.println("-=".repeat(5) + "-=-=-=-=-=-=-=-=-=-=-=" + "-=".repeat(5));
+                    System.out.println("");
+
+                    System.out.println("Deseja Adicionar mais um produto?");
+                    System.out.println("1 - Sim");
+                    System.out.println("2 - Não");
+                    System.out.print("Digite uma opção: ");
+                    String adicionar = input.nextLine();
+                    System.out.print("\n");
+
+                    switch (adicionar) {
+                        case "1" -> {
+                            continue;
+                        }
+                        case "2" -> adicionando = false;
+
+                        default -> System.out.println("Opção inválida");
+                    }
+
+
+                    boolean finalizando = true;
+                    while (finalizando) {
+
+                        System.out.println("Deseja finalizar sua compra agora ?");
+                        System.out.println("1 - Sim");
+                        System.out.println("2 - Finalizar mais tarde");
+                        System.out.print("Digite uma opção: ");
+                        String finalizar = input.nextLine();
+                        System.out.print("\n");
+
+                        switch (finalizar) {
+                            case "1" -> {
+                                finalizarCompras(input);
+                                finalizando = false;
+                            }
+                            case "2" -> {
+                                finalizando = false;
+                                System.out.print("Voltando...\n\n");
+                            }
+                            default -> System.out.println("Opção inválida");
+                        }
+                    }
+
+                } else {
+                    System.out.print("[ERRO] ID inválido!\n\n");
+                }
             }
 
-            System.out.println("Qual o id do produto que você deseja comprar?");
-
-            int idProduto = input.nextInt();
-            input.nextLine();
-
-            int produtosDisponiveis = Integer.parseInt(listaProdutosOriginal.get(idProduto).split("\\|")[1]);
-
-
-            System.out.println("Quantos itens desse produto você deseja comprar?");
-            Integer qtdeProduto = input.nextInt();
-            input.nextLine();
-
-            Integer somaQtdeProduto = qtdeProduto;
-
-            if (carrinhoCompras.get(idProduto) != null) {
-                somaQtdeProduto = carrinhoCompras.get(idProduto) + somaQtdeProduto;
-            }
-
-            if (somaQtdeProduto <= produtosDisponiveis) {
-                carrinhoCompras.put(idProduto, somaQtdeProduto);
-            } else {
-                System.out.printf("No momento existem apenas %d produtos disponíveis no estoque\n", produtosDisponiveis);
-            }
-            System.out.println("-=".repeat(5) + "CARRINHO DE COMPRAS" + "-=".repeat(5));
-            System.out.println("Produto | Preço | Qtde | Valor Total");
-            for (Map.Entry<Integer, Integer> entry : carrinhoCompras.entrySet()) {
-                String[] produto = listaProdutosOriginal.get(entry.getKey()).split("\\|");
-                String nomeProduto = produto[0];
-                Double precoProduto = Double.valueOf(produto[2]);
-                Integer qtdeCarrinho = entry.getValue();
-                Double valorTotal = qtdeCarrinho * precoProduto;
-
-                System.out.printf("%s | %.2f | %d | %.2f\n", nomeProduto, precoProduto, qtdeCarrinho, valorTotal);
-
-            }
-
-            System.out.println("-=".repeat(5) + "-=-=-=-=-=-=-=-=-=-=-=" + "-=".repeat(5));
 
         } catch (Exception ex) {
             System.out.println("Error" + ex.getMessage());
@@ -292,10 +356,38 @@ public class Main {
     }
 
     public static void finalizarCompras(Scanner input) {
+        try {
+            List<String> listaProdutosOriginal = pegarProdutos();
+            Integer id = 0;
+
+            System.out.println("-=".repeat(5) + "CARRINHO DE COMPRAS FECHADO" + "-=".repeat(5));
+            System.out.println("Produto | Preço | Qtde | Valor Total");
+            for (Map.Entry<Integer, Integer> entry : carrinhoCompras.entrySet()) {
+                String[] produto = listaProdutosOriginal.get(entry.getKey()).split("\\|");
+                String nomeProduto = produto[0];
+                Double precoProduto = Double.valueOf(produto[2]);
+                Integer qtdeCarrinho = entry.getValue();
+                Integer qtdeProdutoEstoque = Integer.valueOf(listaProdutosOriginal.get(entry.getKey()).split("\\|")[1]);
+                Double valorTotal = qtdeCarrinho * precoProduto;
+
+                listaProdutosOriginal.set(entry.getKey(), nomeProduto + "|" + (qtdeProdutoEstoque - qtdeCarrinho) + "|" + precoProduto);
+
+                System.out.printf("%s | %.2f | %d | %.2f\n", nomeProduto, precoProduto, qtdeCarrinho, valorTotal);
+
+            }
+
+            System.out.println("-=".repeat(5) + "-=-=-=-=-=-=-=-=-=-=-=" + "-=".repeat(5));
+
+            Files.write(path, listaProdutosOriginal);
+
+            System.out.print("Compra Realizada com sucesso\n\n");
+            carrinhoCompras = new HashMap<>();
+
+        } catch (Exception ex) {
+            System.out.println("Error" + ex.getMessage());
+        }
 
     }
-
-
 }
 
 

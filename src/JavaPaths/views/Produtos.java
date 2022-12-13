@@ -1,4 +1,4 @@
-package JavaPaths.Paginas;
+package JavaPaths.views;
 
 import JavaPaths.Models.Produto;
 import JavaPaths.Services.ProdDataService;

@@ -1,7 +1,7 @@
 package JavaPaths;
 
-import JavaPaths.Paginas.Produtos;
-import JavaPaths.Paginas.Vendas;
+import JavaPaths.views.Produtos;
+import JavaPaths.views.Vendas;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

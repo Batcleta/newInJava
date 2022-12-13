@@ -120,7 +120,13 @@ public class Agenda {
             }
 
             try {
-                new agenda_contatos.Controllers.Agenda().listarTodos(1, 20);
+                List<Contato> contatosEncontrados = new agenda_contatos.Controllers.Agenda().listarTodos(1, 20);
+
+                for (int i = 0; i < contatosEncontrados.size(); i++) {
+                    //apenas nome para teste
+                    System.out.println(contatosEncontrados.get(i).getNome());
+                }
+
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
                 requestPool += 1;

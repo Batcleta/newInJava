@@ -1,8 +1,7 @@
-package JavaPaths.Paginas;
+package JavaPaths.views;
 
 import JavaPaths.Models.ProdutoVenda;
 import JavaPaths.Models.Venda;
-import JavaPaths.Services.ProdDataService;
 import JavaPaths.Services.VendDataService;
 
 import java.nio.file.Path;
